@@ -4,7 +4,7 @@ smbclient-rb
 A Ruby class which wraps the smbclient tool to make easily available from your Ruby scripts/apps
 
 Basic Connection with Clear Text Credentials:
-=================================================
+```ruby
 client = RubySmbClient.new('192.168.2.16', 139, 'c$', 'Administrator', 'P@ssw0rd1', nil, false)
 if client.can_we_connect?
   puts "Connected with valid user & clear-text password!"
@@ -30,11 +30,11 @@ else
   puts "Failed to Connect!"
   puts "OS: #{$os}"
 end
-
+```
 
 
 Basic Connection with Hashed Credentials:
-=================================================
+```ruby
 client = RubySmbClient.new('192.168.2.16', 139, 'c$', 'Administrator', 'ae974876d974abd805a989ebead86846', nil, true)
 if client.can_we_connect?
   puts "Connected with valid user & hashed password!"
@@ -60,11 +60,11 @@ else
   puts "Failed to Connect!"
   puts "OS: #{$os}"
 end
-
+```
 
 
 Run some Single one-off smbclient commands on our own:
-=================================================
+```ruby
 output = client.smb_cmd('ls')
 if not output.nil?
   count=0
@@ -79,19 +79,19 @@ if not output.nil?
 else
   puts "Command did not return any output!"
 end
-
+```
 
 
 Drop to SMB Shell:
-=================================================
+```ruby
 puts "Dropping to SMB Shell...."
 client.smb_shell
 puts
-
+```
 
 
 Download a file over SMB:
-=================================================
+```ruby
 rfile='bootz.ini' # Bad File Name
 lfile='/root/Desktop/downloaded_over_smb-boot.ini.txt'
 puts "Downloading: #{rfile}"
@@ -114,22 +114,22 @@ if client.smb_download(rfile, lfile)
   end
 end
 puts
-
+```
 
 
 Download & Read file from server:
-=================================================
+```ruby
 puts "File: #{rfile}"
 puts "Content: "
 if client.smb_download(rfile, rfile)
   system("cat #{rfile}")
 end
-
+```
 
 
 
 Upload a local file to server & then rename it:
-=================================================
+```ruby
 # upload phpinfo.php to web dir (C:\wamp\www\) on remote server, then rename to pinfo.php
 lfile='/root/Desktop/phpinfo.php'
 rdir="wamp\\\\www\\\\"
@@ -146,13 +146,13 @@ Dir.chdir(lfile.split('/')[0..-2].join('/')) do
     end
   end
 end
-
+```
 
 
 1) Making a directory on remote server
 2) Upload a file, list directory content
 3) Then remove file, list, remove dir and list again
-=================================================
+```ruby
 puts "Trying to make a new directory....."
 #if client.smb_mkdir('smbtest', 'wamp\\\\wwww')
 if client.smb_mkdir('smbtest', 'wamp\\\\www')
@@ -183,12 +183,12 @@ if client.smb_mkdir('smbtest', 'wamp\\\\www')
 else
   puts "Problem making new directory, sorry....."
 end
-
+```
 
 
 
 Download all files from directory on remote server:
-=================================================
+```ruby
 puts "Downloading the Web Directory from remote server......"
 output= client.download_dir('www', 'wamp', confirmation=false)
 if not output.nil?
@@ -200,11 +200,11 @@ if not output.nil?
   puts
   puts "Downloads Successfull!"
 end
-
+```
 
 
 Perform a SMB OS Version Scan:
-=================================================
+```ruby
 puts "Running SMB OS Discovery Scan....."
 (1..254).each do |num|
   $os=''
@@ -218,4 +218,4 @@ puts "Running SMB OS Discovery Scan....."
     puts "[*] Host: 192.168.1.#{num}"
   end
 end
-
+```
